@@ -1,67 +1,147 @@
-// A dedicated, independent HTTP storage bucket for the DE TEAM portal
-const KV_BUCKET_URL = "https://kvdb.io/K99b6BBN2x58pC6SUpXN9U/acca_de_workspaces";
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DE TEAM Strategic Operations Control Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand-yellow: #FFDD00; --dark-bg: #0d0e12; --card-bg: #161920; --text-main: #ffffff; --text-muted: #a0aec0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        header { padding: 30px; max-width: 1400px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        h1 span { color: var(--brand-yellow); }
+        .controls { display: flex; gap: 15px; align-items: center; }
+        .search-bar { background: #1e222b; border: 1px solid #2d3139; padding: 10px 15px; border-radius: 6px; color: white; width: 250px; font-size: 14px; }
+        .search-bar:focus { outline: 1px solid var(--brand-yellow); }
+        .add-btn { background: var(--brand-yellow); color: #000; border: none; padding: 10px 20px; font-weight: 600; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; transition: transform 0.2s; }
+        .add-btn:hover { transform: translateY(-1px); }
+        .main-container { flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; padding: 0 30px 6px 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #222630; height: 240px; display: block; text-decoration: none; transition: transform 0.3s, border-color 0.3s; }
+        .card:hover { transform: translateY(-4px); border-color: #3b4252; }
+        .sky { height: 100%; width: 100%; background-size: cover; background-position: center; transition: transform 0.5s; }
+        .card:hover .sky { transform: scale(1.05); }
+        .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,14,18,0.95) 20%, rgba(13,14,18,0.4) 60%, rgba(13,14,18,0.1) 100%); }
+        .flag { position: absolute; top: 15px; left: 15px; width: 32px; height: auto; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2; }
+        .delete-btn { position: absolute; top: 15px; right: 15px; background: rgba(255, 68, 68, 0.2); border: none; color: #ff4444; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-weight: bold; font-size: 14px; opacity: 0; transition: opacity 0.2s, background 0.2s; }
+        .card:hover .delete-btn { opacity: 1; }
+        .delete-btn:hover { background: rgba(255, 68, 68, 0.6); color: white; }
+        .content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 3; }
+        .content h2 { font-size: 20px; font-weight: 600; color: white; margin-bottom: 4px; }
+        .city { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .btn { display: inline-block; font-size: 13px; font-weight: 600; color: var(--brand-yellow); transition: color 0.2s; }
+        .card:hover .btn { color: white; }
+        footer { padding: 20px; border-top: 1px solid #1e222b; text-align: center; font-size: 12px; color: var(--text-muted); max-width: 1400px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; }
+        footer a { color: var(--brand-yellow); text-decoration: none; }
+        .loading, .error-msg { grid-column: 1 / -1; text-align: center; padding: 60px 0; color: var(--text-muted); font-size: 15px; }
+    </style>
+</head>
+<body>
 
-// Default pre-seeded markets tailored specifically for the DE/DACH division
-const defaultMarkets = [
-  {name:"Deutschland", city:"Frankfurt", code:"de", img:"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1200", url:"#", custom:false},
-  {name:"Österreich", city:"Wien", code:"at", img:"https://images.unsplash.com/photo-1516550360452-9312f5e86fc7?w=1200", url:"#", custom:false},
-  {name:"Schweiz", city:"Zürich", code:"ch", img:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200", url:"#", custom:false}
-];
+<header>
+    <h1>DE TEAM <span>Strategic Operations Control Hub</span></h1>
+    <div class="controls">
+        <input type="text" id="search" class="search-bar" placeholder="Internationalen Markt suchen...">
+        <button id="addBtn" class="add-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Workspace hinzufügen
+        </button>
+    </div>
+</header>
 
-export default async function handler(request, response) {
-  try {
-    const { method } = request;
+<div class="main-container">
+    <div class="grid" id="grid">
+        <div class="loading">Workspace-Repositories werden geladen...</div>
+    </div>
+</div>
 
-    // --- GET: FETCH DE WORKSPACES ---
-    if (method === 'GET') {
-      const res = await fetch(KV_BUCKET_URL);
-      
-      if (res.status === 404) {
-        await fetch(KV_BUCKET_URL, {
-          method: 'POST',
-          body: JSON.stringify(defaultMarkets)
-        });
-        return response.status(200).json(defaultMarkets);
-      }
+<footer>
+    <div>&copy; 2026 ACCA software | Zentrales Multi-Ökosystem-Controlling</div>
+    <div>Support: <a href="mailto:support@acca.it">EN TEAM Hub</a></div>
+</footer>
 
-      const data = await res.json();
-      return response.status(200).json(data);
+<script>
+const grid = document.getElementById('grid');
+const search = document.getElementById('search');
+const addBtn = document.getElementById('addBtn');
+let globalData = [];
+
+async function loadWorkspaces() {
+    try {
+        const res = await fetch('/api/workspaces');
+        if (!res.ok) throw new Error("Fehler beim Laden.");
+        globalData = await res.json();
+        render();
+    } catch (err) {
+        grid.innerHTML = `<div class="error-msg">Verbindung fehlgeschlagen: ${err.message}</div>`;
     }
-
-    // --- POST: ADD NEW DE WORKSPACE ---
-    if (method === 'POST') {
-      const newWorkspace = request.body;
-      const getRes = await fetch(KV_BUCKET_URL);
-      let currentData = getRes.status === 200 ? await getRes.json() : defaultMarkets;
-
-      currentData.push(newWorkspace);
-      
-      await fetch(KV_BUCKET_URL, {
-        method: 'POST',
-        body: JSON.stringify(currentData)
-      });
-      return response.status(200).json(currentData);
-    }
-
-    // --- DELETE: REMOVE DE WORKSPACE ---
-    if (method === 'DELETE') {
-      const { index } = request.query;
-      const getRes = await fetch(KV_BUCKET_URL);
-      let currentData = getRes.status === 200 ? await getRes.json() : defaultMarkets;
-
-      if (index !== undefined) {
-        currentData.splice(parseInt(index, 10), 1);
-        await fetch(KV_BUCKET_URL, {
-          method: 'POST',
-          body: JSON.stringify(currentData)
-        });
-      }
-      return response.status(200).json(currentData);
-    }
-
-    return response.status(405).json({ error: "Method not allowed" });
-
-  } catch (error) {
-    return response.status(500).json({ error: error.message });
-  }
 }
+
+function render(filter = '') {
+    const term = filter.toLowerCase().trim();
+    let combinedHTML = '';
+    const filtered = globalData.filter(d => d.name.toLowerCase().includes(term) || d.city.toLowerCase().includes(term));
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="loading">Keine passenden Workspaces gefunden.</div>';
+        return;
+    }
+
+    filtered.forEach((d) => {
+        const realIndex = globalData.indexOf(d);
+        combinedHTML += `
+        <div class="card">
+            <button class="delete-btn" onclick="event.preventDefault(); deleteCountry(${realIndex}, '${d.name}')">&times;</button>
+            <a href="${d.url}" target="_blank" style="text-decoration:none; color:inherit; display:block; height:100%;">
+                <div class="sky" style="background-image:url('${d.img}')"></div>
+                <div class="overlay"></div>
+                <img class="flag" src="https://flagcdn.com/w320/${d.code.toLowerCase()}.png" onerror="this.src='https://flagcdn.com/w320/un.png'">
+                <div class="content">
+                    <h2>${d.name}</h2>
+                    <div class="city">${d.city} Skyline</div>
+                    <div class="btn">Workspace öffnen &rarr;</div>
+                </div>
+            </a>
+        </div>`;
+    });
+    grid.innerHTML = combinedHTML;
+}
+
+window.deleteCountry = async (index, name) => {
+    if (confirm(`Sind Sie sicher, dass Sie den Workspace für ${name} permanent löschen möchten?`)) {
+        try {
+            grid.innerHTML = '<div class="loading">Aktualisierung...</div>';
+            const res = await fetch(`/api/workspaces?index=${index}`, { method: 'DELETE' });
+            globalData = await res.json();
+            render(search.value);
+        } catch (err) { alert(err.message); loadWorkspaces(); }
+    }
+};
+
+addBtn.onclick = async () => {
+    const countryName = prompt("Name des Landes:"); if (!countryName) return;
+    const cityName = prompt("Name der Stadt:", "Hauptstadt"); if (!cityName) return;
+    const countryCode = prompt("2-stelliger Ländercode (z. B. 'de', 'at', 'ch'):", "un").toLowerCase(); if (!countryCode) return;
+    const customLink = prompt("Ziel-URL:", "#"); if (!customLink) return;
+    const bgImg = prompt("Hintergrundbild-URL:");
+    const finalImg = bgImg ? bgImg : "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200";
+
+    try {
+        grid.innerHTML = '<div class="loading">Speichern...</div>';
+        const res = await fetch('/api/workspaces', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: countryName, city: cityName, code: countryCode, img: finalImg, url: customLink, custom: true })
+        });
+        globalData = await res.json();
+        render(search.value);
+    } catch (err) { alert(err.message); loadWorkspaces(); }
+};
+
+loadWorkspaces();
+search.oninput = e => render(e.target.value);
+</script>
+</body>
+</html>
