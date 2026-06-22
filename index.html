@@ -3,51 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DE TEAM Strategic Operations Control Hub</title>
+    <title>ACCA Portal Digital Business Model Canvas - DE TEAM</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --brand-yellow: #FFDD00; --dark-bg: #0d0e12; --card-bg: #161920; --text-main: #ffffff; --text-muted: #a0aec0; }
+        :root {
+            --brand-yellow: #FFDD00;
+            --dark-bg: #0b0f17;
+            --card-bg: #0f131c;
+            --text-main: #ffffff;
+            --text-muted: #718096;
+            --border-color: #1a202c;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
-        header { padding: 30px; max-width: 1400px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        h1 span { color: var(--brand-yellow); }
-        .controls { display: flex; gap: 15px; align-items: center; }
-        .search-bar { background: #1e222b; border: 1px solid #2d3139; padding: 10px 15px; border-radius: 6px; color: white; width: 250px; font-size: 14px; }
-        .search-bar:focus { outline: 1px solid var(--brand-yellow); }
-        .add-btn { background: var(--brand-yellow); color: #000; border: none; padding: 10px 20px; font-weight: 600; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; transition: transform 0.2s; }
-        .add-btn:hover { transform: translateY(-1px); }
-        .main-container { flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; padding: 0 30px 6px 30px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #222630; height: 240px; display: block; text-decoration: none; transition: transform 0.3s, border-color 0.3s; }
-        .card:hover { transform: translateY(-4px); border-color: #3b4252; }
-        .sky { height: 100%; width: 100%; background-size: cover; background-position: center; transition: transform 0.5s; }
-        .card:hover .sky { transform: scale(1.05); }
-        .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,14,18,0.95) 20%, rgba(13,14,18,0.4) 60%, rgba(13,14,18,0.1) 100%); }
-        .flag { position: absolute; top: 15px; left: 15px; width: 32px; height: auto; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2; }
-        .delete-btn { position: absolute; top: 15px; right: 15px; background: rgba(255, 68, 68, 0.2); border: none; color: #ff4444; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-weight: bold; font-size: 14px; opacity: 0; transition: opacity 0.2s, background 0.2s; }
+        body { background-color: var(--dark-bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        /* Optimierter Header-Bereich im konsistenten Design */
+        header { 
+            padding: 50px 60px; 
+            max-width: 1600px; 
+            width: 100%; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: relative;
+            background: linear-gradient(to bottom, rgba(15, 19, 28, 0.4) 0%, rgba(11, 15, 23, 0) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 0 0 30px 30px;
+            overflow: hidden;
+        }
+
+        .brand-block { position: relative; z-index: 2; }
+        .brand-block h1 { font-size: 38px; font-weight: 800; color: var(--brand-yellow); letter-spacing: -1.5px; margin-bottom: 4px; text-transform: uppercase; }
+        .brand-block h2 { font-size: 24px; font-weight: 600; color: #ffffff; margin-bottom: 6px; letter-spacing: -0.5px; }
+        .brand-block p { font-size: 14px; color: var(--text-muted); font-weight: 400; letter-spacing: 0.2px; }
+        
+        .controls { position: relative; z-index: 2; display: flex; gap: 15px; align-items: center; }
+        .search-bar { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            padding: 14px 24px; 
+            border-radius: 24px; 
+            color: white; 
+            width: 320px; 
+            font-size: 14px; 
+            font-weight: 500;
+            transition: all 0.3s ease; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .search-bar:focus { 
+            outline: none; 
+            border-color: var(--brand-yellow); 
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.15), inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .search-bar::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+        .main-container { flex: 1; max-width: 1600px; width: 100%; margin: 0 auto; padding: 40px 60px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+        
+        /* Karten-Layout angleichen (Premium Dark-Glassmorphism) */
+        .card { background: linear-gradient(135deg, #111622 0%, #0d111a 100%); border-radius: 24px; overflow: hidden; position: relative; border: 1px solid var(--border-color); height: 280px; display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; text-decoration: none; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); border-color: #2d3748; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        
+        .sky { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.15; transition: transform 0.5s, opacity 0.3s; z-index: 1; }
+        .card:hover .sky { transform: scale(1.04); opacity: 0.25; }
+        
+        /* Kreisrunde Flaggen passend zur UI */
+        .flag { position: absolute; top: 40px; right: 40px; width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); z-index: 2; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        
+        .delete-btn { position: absolute; top: 40px; left: 40px; background: rgba(255, 68, 68, 0.15); border: none; color: #ff4444; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-weight: bold; font-size: 16px; opacity: 0; transition: opacity 0.2s, background 0.2s; }
         .card:hover .delete-btn { opacity: 1; }
-        .delete-btn:hover { background: rgba(255, 68, 68, 0.6); color: white; }
-        .content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 3; }
-        .content h2 { font-size: 20px; font-weight: 600; color: white; margin-bottom: 4px; }
-        .city { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        .btn { display: inline-block; font-size: 13px; font-weight: 600; color: var(--brand-yellow); transition: color 0.2s; }
-        .card:hover .btn { color: white; }
-        footer { padding: 20px; border-top: 1px solid #1e222b; text-align: center; font-size: 12px; color: var(--text-muted); max-width: 1400px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; }
-        footer a { color: var(--brand-yellow); text-decoration: none; }
-        .loading, .error-msg { grid-column: 1 / -1; text-align: center; padding: 60px 0; color: var(--text-muted); font-size: 15px; }
+        .delete-btn:hover { background: rgba(255, 68, 68, 0.5); color: white; }
+        
+        .content { z-index: 3; position: relative; }
+        .content h3 { font-size: 28px; font-weight: 700; color: white; margin-bottom: 6px; }
+        .city { font-size: 12px; color: var(--brand-yellow); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px; }
+        
+        .action-btn { background: var(--brand-yellow); color: #000; font-size: 13px; font-weight: 700; padding: 12px 28px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s, transform 0.2s; max-width: fit-content; }
+        .card:hover .action-btn { background: #ffffff; }
+        
+        .add-btn-container { max-width: 1600px; width: 100%; margin: 0 auto; padding: 20px 60px; display: flex; justify-content: flex-end; }
+        .add-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: #ffffff; padding: 14px 28px; font-weight: 600; border-radius: 24px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 14px; transition: background 0.2s, border-color 0.2s; }
+        .add-btn:hover { background: rgba(255,255,255,0.08); border-color: #4a5568; }
+        
+        /* Footer inklusive synchronisiertem Support-Kanal */
+        footer { padding: 40px 60px; border-top: 1px solid rgba(255,255,255,0.02); text-align: center; font-size: 12px; color: var(--text-muted); max-width: 1600px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .footer-hub { font-weight: 500; letter-spacing: 0.5px; }
+        .footer-support { background: rgba(255,255,255,0.03); padding: 6px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.02); display: inline-flex; align-items: center; gap: 6px; }
+        .status-dot { width: 6px; height: 6px; background-color: #00ff66; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff66; }
+        footer a { color: #ffffff; text-decoration: none; font-weight: 600; }
+        footer a:hover { color: var(--brand-yellow); }
+        
+        .loading, .error-msg { grid-column: 1 / -1; text-align: center; padding: 80px 0; color: var(--text-muted); font-size: 16px; font-weight: 500; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>DE TEAM <span>Strategic Operations Control Hub</span></h1>
+    <div class="brand-block">
+        <h1>ACCA</h1>
+        <h2>Digital Business Model Canvas Portal</h2>
+        <p>Zentrales Multi-Ökosystem-Controlling – DE TEAM</p>
+    </div>
     <div class="controls">
         <input type="text" id="search" class="search-bar" placeholder="Internationalen Markt suchen...">
-        <button id="addBtn" class="add-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Workspace hinzufügen
-        </button>
     </div>
 </header>
 
@@ -57,9 +117,19 @@
     </div>
 </div>
 
+<div class="add-btn-container">
+    <button id="addBtn" class="add-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Workspace hinzufügen
+    </button>
+</div>
+
 <footer>
-    <div>&copy; 2026 ACCA software | Zentrales Multi-Ökosystem-Controlling</div>
-    <div>Support: <a href="mailto:support@acca.it">EN TEAM Hub</a></div>
+    <div class="footer-hub">ACCA software | DE TEAM Strategic Operations Control Hub - 2026</div>
+    <div class="footer-support">
+        <span class="status-dot"></span>
+        HUB-Support & Chatkanal: <a href="mailto:support@acca.it">Tony De Palma</a>
+    </div>
 </footer>
 
 <script>
@@ -68,14 +138,30 @@ const search = document.getElementById('search');
 const addBtn = document.getElementById('addBtn');
 let globalData = [];
 
+// Lokale Fallback-Daten für das DE-Team bei Timeouts oder API-Verzögerungen
+const localDefaults = [
+    { name: "Deutschland", city: "Berlin", code: "de", img: "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=1200", url: "#", custom: false },
+    { name: "Österreich", city: "Wien", code: "at", img: "https://images.unsplash.com/photo-1516550360452-9312f5e86fc7?w=1200", url: "#", custom: false },
+    { name: "Schweiz", city: "Bern", code: "ch", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200", url: "#", custom: false }
+];
+
 async function loadWorkspaces() {
+    // 5 Sekunden Zwangs-Timeout-Controller
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     try {
-        const res = await fetch('/api/workspaces');
-        if (!res.ok) throw new Error("Fehler beim Laden.");
+        const res = await fetch('/api/workspaces', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
+        if (!res.ok) throw new Error("Server antwortet nicht korrekt.");
         globalData = await res.json();
         render();
     } catch (err) {
-        grid.innerHTML = `<div class="error-msg">Verbindung fehlgeschlagen: ${err.message}</div>`;
+        clearTimeout(timeoutId);
+        console.warn("API-Verbindung verzögert oder fehlgeschlagen. Verwende lokalen DACH-Sicherheits-Dienst:", err.message);
+        globalData = localDefaults;
+        render();
     }
 }
 
@@ -94,16 +180,13 @@ function render(filter = '') {
         combinedHTML += `
         <div class="card">
             <button class="delete-btn" onclick="event.preventDefault(); deleteCountry(${realIndex}, '${d.name}')">&times;</button>
-            <a href="${d.url}" target="_blank" style="text-decoration:none; color:inherit; display:block; height:100%;">
-                <div class="sky" style="background-image:url('${d.img}')"></div>
-                <div class="overlay"></div>
-                <img class="flag" src="https://flagcdn.com/w320/${d.code.toLowerCase()}.png" onerror="this.src='https://flagcdn.com/w320/un.png'">
-                <div class="content">
-                    <h2>${d.name}</h2>
-                    <div class="city">${d.city} Skyline</div>
-                    <div class="btn">Workspace öffnen &rarr;</div>
-                </div>
-            </a>
+            <div class="sky" style="background-image:url('${d.img}')"></div>
+            <img class="flag" src="https://flagcdn.com/w320/${d.code.toLowerCase()}.png" onerror="this.src='https://flagcdn.com/w320/un.png'">
+            <div class="content">
+                <h3>${d.name}</h3>
+                <div class="city">Skyline von ${d.city}</div>
+                <a href="${d.url}" target="_blank" class="action-btn">Workspace öffnen &rarr;</a>
+            </div>
         </div>`;
     });
     grid.innerHTML = combinedHTML;
@@ -114,30 +197,38 @@ window.deleteCountry = async (index, name) => {
         try {
             grid.innerHTML = '<div class="loading">Aktualisierung...</div>';
             const res = await fetch(`/api/workspaces?index=${index}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error();
             globalData = await res.json();
-            render(search.value);
-        } catch (err) { alert(err.message); loadWorkspaces(); }
+        } catch (err) {
+            globalData.splice(index, 1);
+        }
+        render(search.value);
     }
 };
 
 addBtn.onclick = async () => {
     const countryName = prompt("Name des Landes:"); if (!countryName) return;
-    const cityName = prompt("Name der Stadt:", "Hauptstadt"); if (!cityName) return;
+    const cityName = prompt("Name der Stadt/Hauptstadt:", "Hauptstadt"); if (!cityName) return;
     const countryCode = prompt("2-stelliger Ländercode (z. B. 'de', 'at', 'ch'):", "un").toLowerCase(); if (!countryCode) return;
-    const customLink = prompt("Ziel-URL:", "#"); if (!customLink) return;
+    const customLink = prompt("Ziel-URL des Canvas:", "#"); if (!customLink) return;
     const bgImg = prompt("Hintergrundbild-URL:");
     const finalImg = bgImg ? bgImg : "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200";
+
+    const newItem = { name: countryName, city: cityName, code: countryCode, img: finalImg, url: customLink, custom: true };
 
     try {
         grid.innerHTML = '<div class="loading">Speichern...</div>';
         const res = await fetch('/api/workspaces', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: countryName, city: cityName, code: countryCode, img: finalImg, url: customLink, custom: true })
+            body: JSON.stringify(newItem)
         });
+        if (!res.ok) throw new Error();
         globalData = await res.json();
-        render(search.value);
-    } catch (err) { alert(err.message); loadWorkspaces(); }
+    } catch (err) {
+        globalData.push(newItem);
+    }
+    render(search.value);
 };
 
 loadWorkspaces();
