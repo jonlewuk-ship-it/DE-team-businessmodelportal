@@ -1,7 +1,7 @@
 const KV_BUCKET_URL = "https://kvdb.io/K99b6BBN2x58pC6SUpXN9U/acca_de_workspaces";
 
 const defaultMarkets = [
-  {name:"Deutschland", city:"Frankfurt", code:"de", img:"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1200", url:"#", custom:false},
+  {name:"Deutschland", city:"Frankfurt", code:"de", img:"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1200", url:"https://collaborative-bmc.vercel.app/canvas/csfwyfgjqm64nqc28o4py73twjrvcs5w", custom:false},
   {name:"Österreich", city:"Wien", code:"at", img:"https://images.unsplash.com/photo-1516550360452-9312f5e86fc7?w=1200", url:"#", custom:false},
   {name:"Schweiz", city:"Zürich", code:"ch", img:"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200", url:"#", custom:false}
 ];
